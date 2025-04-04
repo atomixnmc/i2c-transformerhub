@@ -170,6 +170,15 @@ Key classes:
 - `NodeFactory`: Creates node instances
 - `FlowManager`: Manages flow definitions
 
+Everytime to update the shared runtime, you need to run the following command in the root directory:
+```bash
+pnpm run build
+```
+After that, you need to run the following command in the backend directory:
+```bash
+pnpm install
+```
+
 ## Contributing
 
 1. Fork the repository

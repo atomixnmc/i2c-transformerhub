@@ -3,9 +3,36 @@ import styled from "styled-components";
 import { FaStar, FaRegStar, FaEllipsisV } from "react-icons/fa"; // Added import for "More" icon
 import { NodeTypeDefinition } from "../../types";
 import { getIconForNodeType } from "./IconMap";
+import { nodeTypesApi } from "../../services/api";
 
-const NodePaletteContainer = styled.div`
+const NodePaletteContainer = styled.div<{ collapsed: boolean }>`
   margin-bottom: 20px;
+  width: ${(props) => (props.collapsed ? "40px" : "300px")};
+  transition: width 0.3s;
+  overflow: visible; /* Ensure the collapse button is not hidden */
+  position: relative; /* Added to position the collapse button */
+`;
+
+// Adjusted CollapseButton styles
+const CollapseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: -35px; /* Adjusted to ensure visibility */
+  width: 30px;
+  height: 30px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1; /* Ensure it appears above other elements */
+
+  &:hover {
+    background-color: #0056b3;
+  }
 `;
 
 const NodeCategory = styled.div`
@@ -88,6 +115,7 @@ const DropdownMenu = styled.div`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   z-index: 10;
   display: ${(props: { isOpen: boolean }) => (props.isOpen ? "block" : "none")};
+  width: 180px; /* Updated width */
 `;
 
 const DropdownItem = styled.div`
@@ -116,7 +144,7 @@ const NodePalette: React.FC<NodePaletteProps> = ({
   setNodeTypes,
   handleRightClickFavoriteNode,
 }) => {
-
+  const [collapsed, setCollapsed] = useState(false); // Added state for collapsible panel
   const [collapsedCategories, setCollapsedCategories] = useState<{
     [key: string]: boolean;
   }>({
@@ -134,6 +162,16 @@ const NodePalette: React.FC<NodePaletteProps> = ({
   const closeDropdown = useCallback(() => {
     setDropdownOpen(false);
   }, []);
+
+  const refreshNodes = useCallback(async () => {
+    try {
+      const updatedNodeTypes = await nodeTypesApi.getNodeTypes();
+      setNodeTypes(updatedNodeTypes);
+      closeDropdown();
+    } catch (error) {
+      console.error("Failed to refresh nodes:", error);
+    }
+  }, [setNodeTypes, closeDropdown]);
 
   const filteredNodeTypes = nodeTypes.filter((type) => {
     const matchesSearch = type.name
@@ -216,32 +254,42 @@ const NodePalette: React.FC<NodePaletteProps> = ({
   );
 
   return (
-    <NodePaletteContainer>
-      <SearchContainer>
-        <SearchInput
-          type="text"
-          placeholder="Search nodes..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <div style={{ position: "relative" }}>
-          <FaEllipsisV onClick={toggleDropdown} style={{ cursor: "pointer" }} />
-          <DropdownMenu isOpen={dropdownOpen}>
-            <DropdownItem
-              onClick={() => {
-                setShowOnlyFavorites((prev) => !prev);
-                closeDropdown();
-              }}
-            >
-              {showOnlyFavorites ? <FaStar /> : <FaRegStar />}
-              Only favorite
-            </DropdownItem>
-          </DropdownMenu>
-        </div>
-      </SearchContainer>
-      {renderCategory("source", "Data Sources")}
-      {renderCategory("sink", "Sinks")}
-      {renderCategory("action", "Actions")}
+    <NodePaletteContainer collapsed={collapsed}>
+      <CollapseButton onClick={() => setCollapsed((prev) => !prev)}>
+        {collapsed ? ">" : "<"}
+      </CollapseButton>
+      {!collapsed && (
+        <>
+          <SearchContainer>
+            <SearchInput
+              type="text"
+              placeholder="Search nodes..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <div style={{ position: "relative" }}>
+              <FaEllipsisV onClick={toggleDropdown} style={{ cursor: "pointer" }} />
+              <DropdownMenu isOpen={dropdownOpen}>
+                <DropdownItem
+                  onClick={() => {
+                    setShowOnlyFavorites((prev) => !prev);
+                    closeDropdown();
+                  }}
+                >
+                  {showOnlyFavorites ? <FaStar /> : <FaRegStar />}
+                  Only favorite
+                </DropdownItem>
+                <DropdownItem onClick={refreshNodes}>
+                  Refresh Nodes
+                </DropdownItem>
+              </DropdownMenu>
+            </div>
+          </SearchContainer>
+          {renderCategory("source", "Data Sources")}
+          {renderCategory("sink", "Sinks")}
+          {renderCategory("action", "Actions")}
+        </>
+      )}
     </NodePaletteContainer>
   );
 };

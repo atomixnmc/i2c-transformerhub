@@ -9,8 +9,25 @@ import { AudioTranscribe } from "./actionNodes/AudioTranscribe";
 import { AudioNoiseReduction } from "./actionNodes/AudioNoiseReduction";
 import { AudioMix } from "./actionNodes/AudioMix";
 import { VideoCompose } from "./actionNodes/VideoCompose";
-
-// ...convert other classes similarly...
+import { YouTubeUploader } from "./actionNodes/YouTubeUploader";
+import { XMLTransformer } from "./actionNodes/XMLTransformer";
+import { VideoTranscoder } from "./actionNodes/VideoTranscoder";
+import { TextAnalyzer } from "./actionNodes/TextAnalyzer";
+import { TemplateRenderer } from "./actionNodes/TemplateRenderer";
+import { Scheduler } from "./actionNodes/Scheduler";
+import { NotificationSender } from "./actionNodes/NotificationSender";
+import { MLPredictor } from "./actionNodes/MLPredictor";
+import { ImageProcessor } from "./actionNodes/ImageProcessor";
+import { HTTPRequest } from "./actionNodes/HTTPRequest";
+import { FileWriter } from "./actionNodes/FileWriter";
+import { EmailSender } from "./actionNodes/EmailSender";
+import { DataValidator } from "./actionNodes/DataValidator";
+import { DataMapper } from "./actionNodes/DataMapper";
+import { DataJoiner } from "./actionNodes/DataJoiner";
+import { DataFilter } from "./actionNodes/DataFilter";
+import { DatabaseWriter } from "./actionNodes/DatabaseWriter";
+import { DataAggregator } from "./actionNodes/DataAggregator";
+import { ConditionalBranch } from "./actionNodes/ConditionalBranch";
 
 export {
   BaseActionNode,
@@ -24,5 +41,23 @@ export {
   AudioNoiseReduction,
   AudioMix,
   VideoCompose,
-  // ...export other classes...
+  YouTubeUploader,
+  XMLTransformer,
+  VideoTranscoder,
+  TextAnalyzer,
+  TemplateRenderer,
+  Scheduler,
+  NotificationSender,
+  MLPredictor,
+  ImageProcessor,
+  HTTPRequest,
+  FileWriter,
+  EmailSender,
+  DataValidator,
+  DataMapper,
+  DataJoiner,
+  DataFilter,
+  DatabaseWriter,
+  DataAggregator,
+  ConditionalBranch,
 };
