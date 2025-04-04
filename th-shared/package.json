@@ -1,0 +1,32 @@
+{
+  "name": "th-shared",
+  "version": "1.0.0",
+  "description": "A shared JavaScript library for TransformersHub",
+  "main": "dist/transformers-hub-shared.es.js",
+  "type": "module",
+  "module": "dist/transformers-hub-shared.umd.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "test": "jest"
+  },
+  "keywords": [
+    "shared",
+    "library",
+    "transformershub"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "ajv": "^8.17.1"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.3",
+    "vitest": "^3.0.9"
+  }
+}
